@@ -2,17 +2,6 @@
 require("lazy").setup({
   -- Plugin manager
   "nvim-lua/plenary.nvim",
-  {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = { "rust", "lua" },
-        highlight = { enable = true },
-        indent = { enable = true }, -- Enable Treesitter-based indentation
-      })
-    end,
-  },
 
   -- LSP
   "neovim/nvim-lspconfig",
@@ -59,9 +48,9 @@ require("lazy").setup({
         },
         copilot_node_command = 'node', -- Adjust to '/path/to/node' if needed
         logger = {
-          file superintend = vim.fn.stdpath("log") .. "/copilot.log",
-          file_log_level = vim.log.levelsuperindent = vim.log.levels.DEBUG, -- Fixed: Use vim.log.levels.DEBUG
-          print_log_level = vim.log.levels.INFO, -- Fixed: Use vim.log.levels.INFO
+          file = vim.fn.stdpath("log") .. "/copilot.log",
+          file_log_level = vim.log.levels.DEBUG,
+          print_log_level = vim.log.levels.INFO,
         },
       })
     end,
@@ -118,9 +107,12 @@ require("lazy").setup({
           component_separators = { left = "", right = "" },
         },
         sections = {
-          lualine_a = { "superindent = vim.fn.stdpath("log") .. "/copilot.log",
-          file_log_level = vim.log.levels.DEBUG, -- Fixed: Use vim.log.levels.DEBUG
-          print_log_level = vim.log.levels.INFO, -- Fixed: Use vim.log.levels.INFO
+          lualine_a = { "mode" },
+          lualine_b = { "branch", "diff" },
+          lualine_c = { "filename" },
+          lualine_x = { "diagnostics", "encoding", "fileformat", "filetype" },
+          lualine_y = { "progress" },
+          lualine_z = { "location" },
         },
       })
     end,
@@ -193,23 +185,23 @@ require("lazy").setup({
 
   -- Auto-close brackets, parentheses, and quotes
   {
-    "m4xshen/autoclose.nvim",
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
     config = function()
-      require("autoclose").setup({
-        keys = {
-          ["("] = { escape = true, close = true, pair = "()", newline = true },
-          ["["] = { escape = true, close = true, pair = "[]", newline = true },
-          ["{"] = { escape = true, close = true, pair = "{}", newline = true },
-          ['"'] = { escape = true, close = true, pair = '""' },
-          ["'"] = { escape = true, close = true, pair = "''" },
+      require("nvim-autopairs").setup({
+        enable_check_bracket_line = true, -- Ensure pairs are added on new lines
+        map_cr = true, -- Map <CR> to indent and add closing pair
+        check_ts = true, -- Integrate with Treesitter
+        ts_config = {
+          rust = { "if", "while", "for" }, -- Enable for Rust-specific constructs
         },
-        options = {
-          disabled_filetypes = { "text", "markdown" },
-          pair_spaces = true,
-          disable_command_mode = true,
-          auto_indent = true, -- Enable auto-indentation for pairs
-        },
+        disable_filetype = { "TelescopePrompt", "text", "markdown" },
+        fast_wrap = {}, -- Optional: Enable fast wrap for quick pair completion
       })
+      -- Integrate with nvim-cmp
+      local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+      local cmp = require("cmp")
+      cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
     end,
   },
 })
