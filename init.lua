@@ -33,6 +33,27 @@ vim.g.open_command = nil
 -- Set leader key for vim-fugitive keymaps
 vim.g.mapleader = " "
 
+-- Indentation settings for better brace handling
+vim.o.autoindent = true
+vim.o.smartindent = true
+vim.o.expandtab = true -- Use spaces instead of tabs
+vim.o.tabstop = 4 -- Number of spaces per tab
+vim.o.shiftwidth = 4 -- Number of spaces for indentation
+vim.o.softtabstop = 4 -- Number of spaces for tab key in insert mode
+
+-- Filetype-specific indentation for Rust
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "rust",
+  callback = function()
+    vim.bo.autoindent = true
+    vim.bo.smartindent = true
+    vim.bo.expandtab = true
+    vim.bo.tabstop = 4
+    vim.bo.shiftwidth = 4
+    vim.bo.softtabstop = 4
+  end,
+})
+
 -- Require modules
 require("amir.plugins")
 require("amir.lsp")

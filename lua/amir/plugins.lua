@@ -2,7 +2,17 @@
 require("lazy").setup({
   -- Plugin manager
   "nvim-lua/plenary.nvim",
-  "nvim-treesitter/nvim-treesitter",
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = { "rust", "lua" },
+        highlight = { enable = true },
+        indent = { enable = true }, -- Enable Treesitter-based indentation
+      })
+    end,
+  },
 
   -- LSP
   "neovim/nvim-lspconfig",
@@ -49,8 +59,8 @@ require("lazy").setup({
         },
         copilot_node_command = 'node', -- Adjust to '/path/to/node' if needed
         logger = {
-          file = vim.fn.stdpath("log") .. "/copilot.log",
-          file_log_level = vim.log.levels.DEBUG, -- Fixed: Use vim.log.levels.DEBUG
+          file superintend = vim.fn.stdpath("log") .. "/copilot.log",
+          file_log_level = vim.log.levelsuperindent = vim.log.levels.DEBUG, -- Fixed: Use vim.log.levels.DEBUG
           print_log_level = vim.log.levels.INFO, -- Fixed: Use vim.log.levels.INFO
         },
       })
@@ -108,18 +118,13 @@ require("lazy").setup({
           component_separators = { left = "", right = "" },
         },
         sections = {
-          lualine_a = { "mode" },
-          lualine_b = { "branch", "diff" },
-          lualine_c = { "filename" },
-          lualine_x = { "diagnostics", "encoding", "fileformat", "filetype" },
-          lualine_y = { "progress" },
-          lualine_z = { "location" },
+          lualine_a = { "superindent = vim.fn.stdpath("log") .. "/copilot.log",
+          file_log_level = vim.log.levels.DEBUG, -- Fixed: Use vim.log.levels.DEBUG
+          print_log_level = vim.log.levels.INFO, -- Fixed: Use vim.log.levels.INFO
         },
       })
     end,
   },
-
-  
 
   -- File explorer
   {
@@ -192,9 +197,9 @@ require("lazy").setup({
     config = function()
       require("autoclose").setup({
         keys = {
-          ["("] = { escape = true, close = true, pair = "()" },
-          ["["] = { escape = true, close = true, pair = "[]" },
-          ["{"] = { escape = true, close = true, pair = "{}" },
+          ["("] = { escape = true, close = true, pair = "()", newline = true },
+          ["["] = { escape = true, close = true, pair = "[]", newline = true },
+          ["{"] = { escape = true, close = true, pair = "{}", newline = true },
           ['"'] = { escape = true, close = true, pair = '""' },
           ["'"] = { escape = true, close = true, pair = "''" },
         },
@@ -202,6 +207,7 @@ require("lazy").setup({
           disabled_filetypes = { "text", "markdown" },
           pair_spaces = true,
           disable_command_mode = true,
+          auto_indent = true, -- Enable auto-indentation for pairs
         },
       })
     end,
