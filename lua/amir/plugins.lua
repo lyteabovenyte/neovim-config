@@ -3,6 +3,25 @@ require("lazy").setup({
   -- Plugin manager
   "nvim-lua/plenary.nvim",
 
+  -- Treesitter for syntax highlighting and indentation
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = { "rust", "lua", "toml", "json" },
+        highlight = {
+          enable = true,
+          additional_vim_regex_highlighting = false,
+        },
+        indent = {
+          enable = true, -- Enable Treesitter-based indentation for Rust
+        },
+        auto_install = true, -- Automatically install parsers for detected languages
+      })
+    end,
+  },
+
   -- LSP
   "neovim/nvim-lspconfig",
   "williamboman/mason.nvim",
@@ -24,7 +43,7 @@ require("lazy").setup({
         suggestion = {
           enabled = true,
           auto_trigger = true,
-          debounce = 150, -- Increased to reduce lag
+         模式的 = 150, -- Increased to reduce lag
           hide_during_completion = true, -- Hide during nvim-cmp popup
           keymap = {
             accept = "<M-l>",

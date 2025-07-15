@@ -1,5 +1,5 @@
 -- ~/.config/nvim/init.lua
--- [Unchanged from previous version, included for reference]
+
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("config") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -55,12 +55,22 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Auto-save when leaving insert mode
+vim.api.nvim_create_autocmd("InsertLeave", {
+  pattern = "*",
+  callback = function()
+    if vim.bo.modified and vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
+      vim.cmd("write")
+    end
+  end,
+  desc = "Auto-save file when leaving insert mode",
+})
+
 -- Require modules after lazy.nvim is set up
 require("amir.plugins")
 require("amir.lsp")
 require("amir.cmp")
 require("amir.rust")
-require("amir.treesitter")
 require("copilot")
 require("copilot_cmp")
 
@@ -79,10 +89,14 @@ vim.keymap.set("n", "<leader>cd", ":Copilot disable<CR>", { noremap = true, sile
 -- Keymaps for navigating LSP diagnostics
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { noremap = true, silent = true, desc = "Next diagnostic" })
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { noremap = true, silent = true, desc = "Previous diagnostic" })
-vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { noremap = true, silent = true, desc = "Show diagnostic details" })
+vim.keymap.set("n", "<leader>e", function()
+  vim.diagnostic.open_float(nil, { scope = "line" })
+  vim.notify("Showing diagnostics for current line", vim.log.levels.INFO)
+end, { noremap = true, silent = false, desc = "Show diagnostic details" })
 vim.keymap.set("n", "<leader>ld", function()
   vim.diagnostic.setloclist({ open = true })
-end, { noremap = true, silent = true, desc = "List all diagnostics in current file" })
+  vim.notify("Listing all diagnostics in current file", vim.log.levels.INFO)
+end, { noremap = true, silent = false, desc = "List all diagnostics in current file" })
 
 -- Keymaps for opening terminal in splits
 vim.keymap.set("n", "<leader>th", ":split | terminal<CR>", { noremap = true, silent = true, desc = "Open terminal in horizontal split" })
@@ -102,6 +116,12 @@ vim.keymap.set("n", "<leader>cc", ":lua RunCargoCheck()<CR>", { noremap = true, 
 vim.keymap.set("n", "<leader>]e", ":try | cnext | wincmd p | catch | cfirst | wincmd p | endtry<CR>", { noremap = true, silent = true, desc = "Next cargo check error" })
 vim.keymap.set("n", "<leader>[e", ":try | cprev | wincmd p | catch | clast | wincmd p | endtry<CR>", { noremap = true, silent = true, desc = "Previous cargo check error" })
 
+-- Add ; to the end of the line (Rust specific)
+vim.api.nvim_set_keymap('i', ';;', '<Esc>A;<Esc>a', { noremap = true })
+
+-- Clear highlights
+-- vim.keymap.set('n', '<Esc>', '<Esc>:noh<CR>', { silent = true })
+
 -- Function to run cargo check and populate quickfix list
 function RunCargoCheck()
   vim.opt.errorformat = "%f:%l:%c: %t%*[^:]: %m,%f:%l:%c %m,%-G%.%#"
@@ -113,3 +133,9 @@ end
 
 -- Configure makeprg for cargo check
 vim.opt.makeprg = "cargo"
+
+-- Debug keymap to test diagnostics
+vim.keymap.set("n", "<leader>dt", function()
+  local diagnostics = vim.diagnostic.get(0)
+  vim.notify("Diagnostics in buffer: " .. vim.inspect(diagnostics), vim.log.levels.INFO)
+end, { noremap = true, silent = false, desc = "Debug diagnostics in current buffer" })
