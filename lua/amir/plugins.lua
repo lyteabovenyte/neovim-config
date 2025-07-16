@@ -82,6 +82,14 @@ require("lazy").setup({
     end,
   },
 
+  -- Comment and Uncomment
+  {
+  'numToStr/Comment.nvim',
+  config = function()
+    require('Comment').setup()
+  end
+  },
+
   -- Rust tools
   "simrat39/rust-tools.nvim",
 

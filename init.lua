@@ -89,6 +89,13 @@ vim.keymap.set("n", "<leader>ld", function()
   vim.notify("Listing all diagnostics in current file", vim.log.levels.INFO)
 end, { noremap = true, silent = false, desc = "List all diagnostics in current file" })
 
+-- Yank to system clipboard
+vim.keymap.set("v", "<leader>y", '"+y')
+vim.keymap.set("n", "<leader>y", '"+yy')
+
+-- Paste from system clipboard
+vim.keymap.set("n", "<leader>p", '"+p')
+
 -- Keymaps for opening terminal in splits
 vim.keymap.set("n", "<leader>th", ":split | terminal<CR>", { noremap = true, silent = true, desc = "Open terminal in horizontal split" })
 vim.keymap.set("n", "<leader>tv", ":vsplit | terminal<CR>", { noremap = true, silent = true, desc = "Open terminal in vertical split" })
@@ -106,6 +113,17 @@ vim.keymap.set("n", "<leader>cc", ":lua RunCargoCheck()<CR>", { noremap = true, 
 -- Keymaps for navigating quickfix list (cargo check errors)
 vim.keymap.set("n", "<leader>]e", ":try | cnext | wincmd p | catch | cfirst | wincmd p | endtry<CR>", { noremap = true, silent = true, desc = "Next cargo check error" })
 vim.keymap.set("n", "<leader>[e", ":try | cprev | wincmd p | catch | clast | wincmd p | endtry<CR>", { noremap = true, silent = true, desc = "Previous cargo check error" })
+
+-- UnComment lines
+vim.keymap.set("v", "<leader>c", "gc", { remap = true, desc = "Toggle comment in visual mode" })
+vim.keymap.set("n", "<leader>c", "gcc", { remap = true, desc = "Toggle comment on current line" })
+
+-- Move selected lines with shift-j and shift-k (Mac-friendly)
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move visual block down" })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move visual block up" })
+-- Normal Mode version
+vim.keymap.set("n", "J", ":m .+1<CR>==", { desc = "Move current line down" })
+vim.keymap.set("n", "K", ":m .-2<CR>==", { desc = "Move current line up" })
 
 -- Telescope keymaps
 vim.keymap.set("n", "<leader>ff", ":Telescope find_files<CR>", { noremap = true, silent = true, desc = "Find files" })
