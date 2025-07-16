@@ -77,15 +77,6 @@ require("copilot_cmp")
 -- Keymap for Ctrl+B to toggle nvim-tree
 vim.keymap.set("n", "<C-b>", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
 
--- Keymaps to toggle between colorschemes
-vim.keymap.set("n", "<leader>cd", ":set background=dark | colorscheme vscode<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>cl", ":set background=light | colorscheme vscode<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>cn", ":colorscheme nord<CR>", { noremap = true, silent = true })
-
--- Keymaps to toggle Copilot
-vim.keymap.set("n", "<leader>ce", ":Copilot enable<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>cd", ":Copilot disable<CR>", { noremap = true, silent = true })
-
 -- Keymaps for navigating LSP diagnostics
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { noremap = true, silent = true, desc = "Next diagnostic" })
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { noremap = true, silent = true, desc = "Previous diagnostic" })
