@@ -43,7 +43,7 @@ require("lazy").setup({
         suggestion = {
           enabled = true,
           auto_trigger = true,
-         模式的 = 150, -- Increased to reduce lag
+          debounce = 150, -- Increased to reduce lag
           hide_during_completion = true, -- Hide during nvim-cmp popup
           keymap = {
             accept = "<M-l>",
@@ -222,5 +222,61 @@ require("lazy").setup({
       local cmp = require("cmp")
       cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
     end,
+  },
+
+  -- Telescope for fuzzy finding and git integration
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("telescope").setup({
+        defaults = {
+          mappings = {
+            i = {
+              ["<C-j>"] = require("telescope.actions").move_selection_next,
+              ["<C-k>"] = require("telescope.actions").move_selection_previous,
+              ["<C-q>"] = require("telescope.actions").send_to_qflist + require("telescope.actions").open_qflist,
+              ["<C-x>"] = require("telescope.actions").delete_buffer,
+            },
+            n = {
+              ["<C-j>"] = require("telescope.actions").move_selection_next,
+              ["<C-k>"] = require("telescope.actions").move_selection_previous,
+              ["<C-q>"] = require("telescope.actions").send_to_qflist + require("telescope.actions").open_qflist,
+              ["<q>"] = require("telescope.actions").close,
+            },
+          },
+          layout_strategy = "vertical",
+          layout_config = {
+            vertical = { width = 0.9, height = 0.9, preview_height = 0.6 },
+          },
+        },
+        pickers = {
+          find_files = {
+            hidden = true, -- Show hidden files
+            file_ignore_patterns = { "%.git/", "node_modules/", "%.DS_Store" },
+          },
+          git_commits = {
+            git_command = { "git", "log", "--pretty=oneline", "--abbrev-commit", "--" },
+          },
+        },
+        extensions = {
+          fzf = {
+            fuzzy = true,
+            override_generic_sorter = true,
+            override_file_sorter = true,
+            case_mode = "smart_case",
+          },
+        },
+      })
+      -- Load fzf extension
+      require("telescope").load_extension("fzf")
+    end,
+  },
+
+  -- Telescope fzf native for faster searching
+  {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    build = "make",
+    dependencies = { "nvim-telescope/telescope.nvim" },
   },
 })

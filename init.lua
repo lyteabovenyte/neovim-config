@@ -116,11 +116,47 @@ vim.keymap.set("n", "<leader>cc", ":lua RunCargoCheck()<CR>", { noremap = true, 
 vim.keymap.set("n", "<leader>]e", ":try | cnext | wincmd p | catch | cfirst | wincmd p | endtry<CR>", { noremap = true, silent = true, desc = "Next cargo check error" })
 vim.keymap.set("n", "<leader>[e", ":try | cprev | wincmd p | catch | clast | wincmd p | endtry<CR>", { noremap = true, silent = true, desc = "Previous cargo check error" })
 
+-- Telescope keymaps
+vim.keymap.set("n", "<leader>ff", ":Telescope find_files<CR>", { noremap = true, silent = true, desc = "Find files" })
+vim.keymap.set("n", "<leader>fg", ":Telescope live_grep<CR>", { noremap = true, silent = true, desc = "Live grep" })
+vim.keymap.set("n", "<leader>fb", ":Telescope buffers<CR>", { noremap = true, silent = true, desc = "List buffers" })
+vim.keymap.set("n", "<leader>gc", ":Telescope git_commits<CR>", { noremap = true, silent = true, desc = "Git commits" })
+vim.keymap.set("n", "<leader>gs", ":Telescope git_status<CR>", { noremap = true, silent = true, desc = "Git status" })
+vim.keymap.set("n", "<leader>fh", ":Telescope help_tags<CR>", { noremap = true, silent = true, desc = "Help tags" })
+vim.keymap.set("n", "<leader>gx", function()
+  local commits = {}
+  require("telescope.builtin").git_commits({
+    prompt_title = "Select First Commit",
+    attach_mappings = function(_, map)
+      map("i", "<CR>", function(prompt_bufnr)
+        local selection = require("telescope.actions.state").get_selected_entry()
+        table.insert(commits, selection.value:match("^%S+"))
+        require("telescope.actions").close(prompt_bufnr)
+        require("telescope.builtin").git_commits({
+          prompt_title = "Select Second Commit",
+          attach_mappings = function(_, map2)
+            map2("i", "<CR>", function(prompt_bufnr2)
+              local selection2 = require("telescope.actions.state").get_selected_entry()
+              table.insert(commits, selection2.value:match("^%S+"))
+              require("telescope.actions").close(prompt_bufnr2)
+              if #commits == 2 then
+                vim.cmd("Gdiffsplit " .. commits[1] .. ".." .. commits[2])
+              end
+            end)
+            return true
+          end,
+        })
+      end)
+      return true
+    end,
+  })
+end, { noremap = true, silent = true, desc = "Git diff between two commits" })
+
 -- Add ; to the end of the line (Rust specific)
 vim.api.nvim_set_keymap('i', ';;', '<Esc>A;<Esc>a', { noremap = true })
 
 -- Clear highlights
--- vim.keymap.set('n', '<Esc>', '<Esc>:noh<CR>', { silent = true })
+vim.keymap.set('n', '<Esc>', ':noh<CR>', { silent = true })
 
 -- Function to run cargo check and populate quickfix list
 function RunCargoCheck()
