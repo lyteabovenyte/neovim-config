@@ -3,6 +3,16 @@ require("lazy").setup({
   -- Plugin manager
   "nvim-lua/plenary.nvim",
 
+  -- Gruvbox colorscheme
+  -- {
+  --   "morhetz/gruvbox",
+  --   priority = 1000,
+  --   config = function()
+  --     vim.o.background = "dark" -- Default to dark background; can be changed manually
+  --     vim.cmd("colorscheme gruvbox") -- Apply gruvbox colorscheme
+  --   end,
+  -- },
+
   -- Treesitter for syntax highlighting and indentation
   {
     "nvim-treesitter/nvim-treesitter",
@@ -84,10 +94,10 @@ require("lazy").setup({
 
   -- Comment and Uncomment
   {
-  'numToStr/Comment.nvim',
-  config = function()
-    require('Comment').setup()
-  end
+    'numToStr/Comment.nvim',
+    config = function()
+      require('Comment').setup()
+    end
   },
 
   -- Rust tools
