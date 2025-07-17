@@ -69,37 +69,37 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 -- Set habamax colorscheme with protected call
 vim.o.termguicolors = true
 vim.o.background = "dark"
-local status, _ = pcall(vim.cmd, "colorscheme habamax")
+local status, _ = pcall(vim.cmd, "colorscheme default")
 if not status then
   vim.notify("Colorscheme habamax not found!", vim.log.levels.ERROR)
 end
 
 -- Custom command to toggle habamax contrast
-vim.api.nvim_create_user_command("HabamaxContrast", function(opts)
+vim.api.nvim_create_user_command("Contrast", function(opts)
   local mode = opts.args:lower()
   if mode == "high" then
     -- High-contrast overrides for vibrant colors
-    vim.api.nvim_set_hl(0, "Normal", { fg = "#ffffff", bg = "#1a1a1a" }) -- Brighter foreground, slightly darker background
-    -- vim.api.nvim_set_hl(0, "Keyword", { fg = "#fea2cb" }) -- Bright red for keywords
+    vim.api.nvim_set_hl(0, "Normal", { fg = "#ffffff", bg = "#1b1b1b" }) -- Brighter foreground, slightly darker background
+    vim.api.nvim_set_hl(0, "Keyword", { fg = "#fea2cb" }) -- Bright red for keywords
     -- vim.api.nvim_set_hl(0, "String", { fg = "#bbff88" }) -- Bright green for strings
-    -- vim.api.nvim_set_hl(0, "Constant", { fg = "#ffc95e" }) -- Bright orange for constants
+    vim.api.nvim_set_hl(0, "Constant", { fg = "#ffc95e" }) -- Bright orange for constants
     -- vim.api.nvim_set_hl(0, "Comment", { fg = "#87f3ff" }) -- Bright blue for comments
     -- vim.api.nvim_set_hl(0, "Function", { fg = "#46f0ff" }) -- Bright magenta for functions
     -- vim.api.nvim_set_hl(0, "Identifier", { fg = "#ffffff" }) -- Bright cyan for identifiers
-    -- vim.api.nvim_set_hl(0, "Type", { fg = "#ffffff" }) -- Bright yellow for types
+    vim.api.nvim_set_hl(0, "Type", { fg = "#dbff88" }) -- Bright yellow for types
     -- vim.api.nvim_set_hl(0, "Statement", { fg = "#ffffff" }) -- Bright red for statements
     -- vim.api.nvim_set_hl(0, "PreProc", { fg = "#ffffff" }) -- Bright pink for preprocessor directives
-    vim.notify("Habamax set to high-contrast mode", vim.log.levels.INFO)
+    vim.notify("colorscheme set to high-contrast mode", vim.log.levels.INFO)
   elseif mode == "default" then
     -- Reset to default habamax colors
-    vim.cmd("colorscheme habamax")
-    vim.notify("Habamax set to default mode", vim.log.levels.INFO)
+    vim.cmd("colorscheme default")
+    vim.notify("colorscheme set to default mode", vim.log.levels.INFO)
   else
-    vim.notify("Usage: HabamaxContrast {default|high}", vim.log.levels.ERROR)
+    vim.notify("Usage: contrast {default|high}", vim.log.levels.ERROR)
   end
 end, {
   nargs = 1,
-  desc = "Toggle habamax contrast (e.g., :HabamaxContrast high)",
+  desc = "Toggle contrast (e.g., :contrast high)",
 })
 
 -- Require modules after lazy.nvim is set up
