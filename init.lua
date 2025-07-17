@@ -125,6 +125,9 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move visual block up" })
 vim.keymap.set("n", "J", ":m .+1<CR>==", { desc = "Move current line down" })
 vim.keymap.set("n", "K", ":m .-2<CR>==", { desc = "Move current line up" })
 
+-- Function signature help
+vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, { noremap = true, silent = true, desc = "Show signature help" })
+
 -- Telescope keymaps
 vim.keymap.set("n", "<leader>ff", ":Telescope find_files<CR>", { noremap = true, silent = true, desc = "Find files" })
 vim.keymap.set("n", "<leader>fg", ":Telescope live_grep<CR>", { noremap = true, silent = true, desc = "Live grep" })
