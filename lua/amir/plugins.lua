@@ -3,16 +3,6 @@ require("lazy").setup({
   -- Plugin manager
   "nvim-lua/plenary.nvim",
 
-  -- Gruvbox colorscheme
-  -- {
-  --   "morhetz/gruvbox",
-  --   priority = 1000,
-  --   config = function()
-  --     vim.o.background = "dark" -- Default to dark background; can be changed manually
-  --     vim.cmd("colorscheme gruvbox") -- Apply gruvbox colorscheme
-  --   end,
-  -- },
-
   -- Treesitter for syntax highlighting and indentation
   {
     "nvim-treesitter/nvim-treesitter",
@@ -149,6 +139,29 @@ require("lazy").setup({
     end,
   },
 
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        textobjects = {
+          select = {
+            enable = true,
+            lookahead = true, -- Automatically jump to the next valid object
+            keymaps = {
+              -- Select around/inside a block (like enum, function, etc.)
+              ["ab"] = "@block.outer",
+              ["ib"] = "@block.inner",
+              -- Select around/inside a class (useful for Rust enums/structs)
+              ["ac"] = "@class.outer",
+              ["ic"] = "@class.inner",
+            },
+          },
+        },
+      })
+    end,
+  },
+
   -- Statusline
   {
     "nvim-lualine/lualine.nvim",
@@ -223,6 +236,28 @@ require("lazy").setup({
           },
           git_commits = {
             git_command = { "git", "log", "--pretty=oneline", "--abbrev-commit", "--" },
+          },
+          buffers = {
+            sort_mru = true, -- Sort buffers by most recently used
+            ignore_current_buffer = true, -- Skip the current buffer in the list
+            previewer = true, -- Enable content preview
+            show_all_buffers = true, -- Include unlisted buffers (e.g., help files)
+            theme = "dropdown", -- Compact dropdown style for quicker access
+            layout_config = {
+              width = 0.6, -- Narrower width for buffer list
+              height = 0.5, -- Compact height
+              preview_width = 0.5, -- Balanced preview and list
+            },
+            mappings = {
+              i = {
+                ["<C-d>"] = require("telescope.actions").delete_buffer + require("telescope.actions").move_to_top, -- Delete buffer and refresh list
+                ["<CR>"] = require("telescope.actions").select_default + require("telescope.actions").center, -- Select buffer and center cursor
+              },
+              n = {
+                ["<C-d>"] = require("telescope.actions").delete_buffer + require("telescope.actions").move_to_top, -- Delete buffer in normal mode
+                ["d"] = require("telescope.actions").delete_buffer + require("telescope.actions").move_to_top, -- Alternative delete key
+              },
+            },
           },
         },
         extensions = {

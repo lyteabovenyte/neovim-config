@@ -79,16 +79,9 @@ vim.api.nvim_create_user_command("Contrast", function(opts)
   local mode = opts.args:lower()
   if mode == "high" then
     -- High-contrast overrides for vibrant colors
-    vim.api.nvim_set_hl(0, "Normal", { fg = "#ffffff", bg = "#1b1b1b" }) -- Brighter foreground, slightly darker background
     vim.api.nvim_set_hl(0, "Keyword", { fg = "#fea2cb" }) -- Bright red for keywords
-    -- vim.api.nvim_set_hl(0, "String", { fg = "#bbff88" }) -- Bright green for strings
     vim.api.nvim_set_hl(0, "Constant", { fg = "#ffc95e" }) -- Bright orange for constants
-    -- vim.api.nvim_set_hl(0, "Comment", { fg = "#87f3ff" }) -- Bright blue for comments
-    -- vim.api.nvim_set_hl(0, "Function", { fg = "#46f0ff" }) -- Bright magenta for functions
-    -- vim.api.nvim_set_hl(0, "Identifier", { fg = "#ffffff" }) -- Bright cyan for identifiers
     vim.api.nvim_set_hl(0, "Type", { fg = "#dbff88" }) -- Bright yellow for types
-    -- vim.api.nvim_set_hl(0, "Statement", { fg = "#ffffff" }) -- Bright red for statements
-    -- vim.api.nvim_set_hl(0, "PreProc", { fg = "#ffffff" }) -- Bright pink for preprocessor directives
     vim.notify("colorscheme set to high-contrast mode", vim.log.levels.INFO)
   elseif mode == "default" then
     -- Reset to default habamax colors
@@ -130,11 +123,14 @@ vim.keymap.set("v", "<leader>y", '"+y')
 vim.keymap.set("n", "<leader>y", '"+yy')
 
 -- Paste from system clipboard
-vim.keymap.set("n", "<leader>p", '"+p')
+vim.keymap.set("n", "<leader>p", '"+p', { noremap = true, silent = true, desc = "Paste from system clipboard" })
 
 -- Keymaps for opening terminal in splits
 vim.keymap.set("n", "<leader>th", ":split | terminal<CR>", { noremap = true, silent = true, desc = "Open terminal in horizontal split" })
 vim.keymap.set("n", "<leader>tv", ":vsplit | terminal<CR>", { noremap = true, silent = true, desc = "Open terminal in vertical split" })
+
+-- Rust LSP Code Actions via Telescope
+vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP Code Action" })
 
 -- Keymaps for switching between split windows
 vim.keymap.set("n", "<leader>wh", "<C-w>h", { noremap = true, silent = true, desc = "Move to left window" })
@@ -164,10 +160,14 @@ vim.keymap.set("n", "K", ":m .-2<CR>==", { desc = "Move current line up" })
 -- Function signature help
 vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, { noremap = true, silent = true, desc = "Show signature help" })
 
+-- Set smartindent and autoindent
+vim.o.autoindent = true
+vim.o.smartindent = true
+
 -- Telescope keymaps
 vim.keymap.set("n", "<leader>ff", ":Telescope find_files<CR>", { noremap = true, silent = true, desc = "Find files" })
 vim.keymap.set("n", "<leader>fg", ":Telescope live_grep<CR>", { noremap = true, silent = true, desc = "Live grep" })
-vim.keymap.set("n", "<leader>fb", ":Telescope buffers<CR>", { noremap = true, silent = true, desc = "List buffers" })
+vim.keymap.set("n", "<leader>b", ":Telescope buffers<CR>", { noremap = true, silent = true, desc = "List buffers" })
 vim.keymap.set("n", "<leader>gc", ":Telescope git_commits<CR>", { noremap = true, silent = true, desc = "Git commits" })
 vim.keymap.set("n", "<leader>gs", ":Telescope git_status<CR>", { noremap = true, silent = true, desc = "Git status" })
 vim.keymap.set("n", "<leader>fh", ":Telescope help_tags<CR>", { noremap = true, silent = true, desc = "Help tags" })
@@ -199,6 +199,16 @@ vim.keymap.set("n", "<leader>gx", function()
     end,
   })
 end, { noremap = true, silent = true, desc = "Git diff between two commits" })
+
+-- Buffer navigation keymaps
+vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
+vim.keymap.set("n", "<leader>bm", ":bprev<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
+vim.keymap.set("n", "<leader>bd", ":bdelete<CR>", { noremap = true, silent = true, desc = "Delete current buffer" })
+vim.keymap.set("n", "<leader>1", ":buffer 1<CR>", { noremap = true, silent = true, desc = "Jump to buffer 1" })
+vim.keymap.set("n", "<leader>2", ":buffer 2<CR>", { noremap = true, silent = true, desc = "Jump to buffer 2" })
+vim.keymap.set("n", "<leader>3", ":buffer 3<CR>", { noremap = true, silent = true, desc = "Jump to buffer 3" })
+vim.keymap.set("n", "<leader>4", ":buffer 4<CR>", { noremap = true, silent = true, desc = "Jump to buffer 4" })
+vim.keymap.set("n", "<leader>5", ":buffer 5<CR>", { noremap = true, silent = true, desc = "Jump to buffer 5" })
 
 -- Add ; to the end of the line (Rust specific)
 vim.api.nvim_set_keymap('i', ';;', '<Esc>A;<Esc>a', { noremap = true })
