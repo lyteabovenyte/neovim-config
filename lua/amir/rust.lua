@@ -1,19 +1,23 @@
 -- ~/.config/nvim/lua/amir/rust.lua
 local rt = require("rust-tools")
+local lsp_utils = require("amir.lsp")  -- This now gets the module table with on_attach and capabilities
 
 rt.setup({
   server = {
+    capabilities = lsp_utils.capabilities,
+    on_attach = lsp_utils.on_attach,
     settings = {
       ["rust-analyzer"] = {
         checkOnSave = true,
         check = {
-          command = "check",
+          command = "clippy",
         }
       },
     },
-    on_attach = function(_, bufnr)
-      vim.keymap.set("n", "K", rt.hover_actions.hover_actions, { buffer = bufnr })
-      vim.keymap.set("n", "<Leader>ca", rt.code_action_group.code_action_group, { buffer = bufnr })
-    end,
+  },
+  tools = {
+    inlay_hints = {
+      auto = true,
+    },
   }
 })

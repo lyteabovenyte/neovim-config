@@ -165,6 +165,7 @@ vim.o.autoindent = true
 vim.o.smartindent = true
 
 -- Telescope keymaps
+vim.keymap.set('n', '<leader>fd', ':Telescope lsp_definitions<CR>', { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>ff", ":Telescope find_files<CR>", { noremap = true, silent = true, desc = "Find files" })
 vim.keymap.set("n", "<leader>fg", ":Telescope live_grep<CR>", { noremap = true, silent = true, desc = "Live grep" })
 vim.keymap.set("n", "<leader>b", ":Telescope buffers<CR>", { noremap = true, silent = true, desc = "List buffers" })
