@@ -74,17 +74,20 @@ if not status then
   vim.notify("Colorscheme habamax not found!", vim.log.levels.ERROR)
 end
 
--- Custom command to toggle habamax contrast
+-- Custom command to toggle colortheme contrast
 vim.api.nvim_create_user_command("Contrast", function(opts)
   local mode = opts.args:lower()
   if mode == "high" then
     -- High-contrast overrides for vibrant colors
     vim.api.nvim_set_hl(0, "Keyword", { fg = "#fea2cb" }) -- Bright red for keywords
     vim.api.nvim_set_hl(0, "Constant", { fg = "#ffc95e" }) -- Bright orange for constants
-    vim.api.nvim_set_hl(0, "Type", { fg = "#dbff88" }) -- Bright yellow for types
     vim.notify("colorscheme set to high-contrast mode", vim.log.levels.INFO)
+    vim.api.nvim_set_hl(0, "@lsp.type.struct.rust", { fg = "#c2afff" })   -- Structs: mint
+    vim.api.nvim_set_hl(0, "@lsp.type.enum.rust",   { fg = "#ffaa99" })   -- Enums: salmon
+    -- vim.api.nvim_set_hl(0, "@type.identifier",  { fg = "#c2afff" })   -- Traits: lavender
+    vim.api.nvim_set_hl(0, "Type", { fg = "#e0fe99" }) -- Bright yellow for types
   elseif mode == "default" then
-    -- Reset to default habamax colors
+    -- Reset to default colortheme colors
     vim.cmd("colorscheme default")
     vim.notify("colorscheme set to default mode", vim.log.levels.INFO)
   else
@@ -163,7 +166,7 @@ vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, { noremap = true, silen
 -- Set smartindent and autoindent
 vim.o.autoindent = true
 vim.o.smartindent = true
-
+vim.o.termguicolors = true
 -- Telescope keymaps
 vim.keymap.set('n', '<leader>fd', ':Telescope lsp_definitions<CR>', { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>ff", ":Telescope find_files<CR>", { noremap = true, silent = true, desc = "Find files" })
