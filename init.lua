@@ -79,6 +79,7 @@ vim.api.nvim_create_user_command("Contrast", function(opts)
   local mode = opts.args:lower()
   if mode == "high" then
     -- High-contrast overrides for vibrant colors
+    vim.api.nvim_set_hl(0, "Normal", { bg = "#1A2529" })
     vim.api.nvim_set_hl(0, "Keyword", { fg = "#fea2cb" }) -- Bright red for keywords
     vim.api.nvim_set_hl(0, "Constant", { fg = "#ffc95e" }) -- Bright orange for constants
     vim.notify("colorscheme set to high-contrast mode", vim.log.levels.INFO)

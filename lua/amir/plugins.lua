@@ -274,6 +274,26 @@ require("lazy").setup({
     end,
   },
 
+  -- Color schemes
+  { "folke/tokyonight.nvim" },
+  { "rebelot/kanagawa.nvim" },
+  { "navarasu/onedark.nvim" },
+  { "catppuccin/nvim", name = "catppuccin" },
+  { "rose-pine/neovim", name = "rose-pine" },
+  { "ellisonleao/gruvbox.nvim" },
+  { "sainnhe/gruvbox-material" },
+  { "sainnhe/everforest" },
+  { "EdenEast/nightfox.nvim" },
+  { "Mofiqul/dracula.nvim" },
+  { "olimorris/onedarkpro.nvim" },
+  { "tanvirtin/monokai.nvim" },
+  { "marko-cerovac/material.nvim" },
+  { "projekt0n/github-nvim-theme" },
+  { "NTBBloodbath/doom-one.nvim" },
+  { "sainnhe/sonokai" },
+  { "bluz71/vim-nightfly-colors", name = "nightfly" },
+  { "bluz71/vim-moonfly-colors", name = "moonfly" },
+
   -- Telescope fzf native for faster searching
   {
     "nvim-telescope/telescope-fzf-native.nvim",
